@@ -1,9 +1,8 @@
 <template>
   <v-app>
     <v-main>
-        <v-toolbar dense>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
-          <v-toolbar-title>Title</v-toolbar-title>
+        <v-toolbar dense>          
+          <v-toolbar-title>Simple Weather app</v-toolbar-title>
         </v-toolbar>
         <transition>
             <nuxt/>

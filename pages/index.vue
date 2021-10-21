@@ -5,12 +5,12 @@
       <v-col cols="12">
         <v-flex lg12>
           <v-form @submit.prevent="$fetch">
-            <v-text-field v-model="city" label="Regular" solo></v-text-field>
+            <v-text-field v-model="city" label="Example: London, gb" solo></v-text-field>
           </v-form>     
         </v-flex>
       </v-col>
 
-      <v-col cols="6" md="6">        
+      <v-col v-if="weather.weather" cols="6" md="6" >        
         <v-card
           outlined
           tile
@@ -23,7 +23,7 @@
                     <p>
                       {{weather.weather[0].description}}
                     </p>     
-                    <h3>Temperatura</h3>
+                    <h3>temperature</h3>
                     <h3>{{temp(weather.main.temp)}}º</h3>                       
                     <img :src="icon(weather.weather[0].icon)" height="70" width="70">                
                   </v-flex>
@@ -41,7 +41,7 @@
         </v-card>       
       </v-col>
 
-      <v-col cols="8" md="4">
+      <v-col v-if="weather.weather" cols="8" md="4" >
         <v-card          
           outlined
           tile          
@@ -66,6 +66,7 @@
                       <v-list-item-title >{{getWeekday(index)}}</v-list-item-title>
                       <v-list-item-subtitle>{{temp(day.temp.min)}}/{{temp(day.temp.max)}}ºC</v-list-item-subtitle>
                     </v-list-item-content>
+                    
                   </v-list-item>
                 </v-list>                                        
               </v-flex>
@@ -73,19 +74,22 @@
           </v-card-text>        
         </v-card>
       </v-col>
+
     </v-row>
+
   </v-container> 
 </template>
 
 <script>
   export default {
     data: () => ({
-      city: 'Sao paulo',
+      city: '',
       weather: {},
       days: {}
     }),
     async fetch(){
-      this.weather = await this.$axios
+      if (this.city !== ''){
+        this.weather = await this.$axios
         .$get(
           `https://api.openweathermap.org/data/2.5/weather?q=${
           this.city
@@ -100,6 +104,10 @@
             this.weather.coord.lon
           }&units=metric&appid=b1180f5d0b40919286fcd5324dac4425`
         )
+      }else{
+        this.weather = {}
+        this.days = {}
+      }     
     },
     methods:{
       temp(temp){
